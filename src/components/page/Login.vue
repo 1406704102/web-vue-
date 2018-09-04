@@ -13,52 +13,49 @@
         <div class="login-btn">
           <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
         </div>
-        <p style="font-size:12px;line-height:30px;color:#999;">Tips : 用户名和密码随便填。</p>
       </el-form>
     </div>
   </div>
 </template>
 
 <script>
-  export default {
-    data: function () {
-      return {
-        ruleForm: {
-          username: 'pangjie1',
-          password: '123123'
-        },
-        rules: {
-          username: [
-            {required: true, message: '请输入用户名', trigger: 'blur'}
-          ],
-          password: [
-            {required: true, message: '请输入密码', trigger: 'blur'}
-          ]
-        }
-      }
-    },
-    methods: {
-      submitForm(formName) {
-        const v = this;
-        this.$refs[formName].validate((valid) => {
-          const from = this.ruleForm;
-          if (valid) {
-            this.$axios.post('/api/UserCon/findByName?userName=' + from.username).then(function (data) {
-              if (data.data === from.password) {
-                console.log(data.data);
-
-                localStorage.setItem('ms_username', from.username);
-                v.$router.push('/dashboard');
-              }
-            });
-          } else {
-            console.log('error submit!!');
-            return false
-          }
-        })
+export default {
+  data: function () {
+    return {
+      ruleForm: {
+        username: '',
+        password: ''
+      },
+      rules: {
+        username: [
+          {required: true, message: '请输入用户名', trigger: 'blur'}
+        ],
+        password: [
+          {required: true, message: '请输入密码', trigger: 'blur'}
+        ]
       }
     }
+  },
+  methods: {
+    submitForm (formName) {
+      const v = this
+      this.$refs[formName].validate((valid) => {
+        const from = this.ruleForm
+        if (valid) {
+          this.$axios.post('/api/UserCon/findByName?userName=' + from.username).then(function (data) {
+            if (data.status === 200) {
+              localStorage.setItem('ms_username', from.username)
+              v.$router.push('/dashboard')
+            }
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    }
   }
+}
 </script>
 
 <style scoped>
