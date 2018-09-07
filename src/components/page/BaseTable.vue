@@ -7,31 +7,43 @@
         </div>
         <div class="container">
             <div class="handle-box">
-              <el-button type="primary" icon="add" class="handle-del mr10" @click="dialogFormVisible = true">添加会员</el-button>
-              <el-button type="danger" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
-              <el-select v-model="select_cate" placeholder="筛选省份" class="handle-select mr10">
-                <el-option key="1" label="广东省" value="广东省"></el-option>
-                <el-option key="2" label="湖南省" value="湖南省"></el-option>
+              <el-tooltip class="item" effect="dark" content="添加会员" placement="top">
+                <el-button type="primary" class="el-icon-plus" @click="dialogFormVisible = true"></el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="批量删除" placement="top">
+                <el-button type="danger" class="el-icon-delete" @click="delAll"></el-button>
+              </el-tooltip>
+              <el-select v-model="select_cate" placeholder="筛选项" class="handle-select mr10">
+                <el-option key="1" label="姓名" value="name"></el-option>
+                <el-option key="2" label="电话" value="phone"></el-option>
+                <el-option key="3" label="积分" value="integral"></el-option>
               </el-select>
               <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10"></el-input>
-              <el-button type="primary" icon="search" @click="search">搜索</el-button>
+              <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
             </div>
 
           <!--表格-->
             <el-table :data="tableData" stripe border style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange">
-                <el-table-column type="selection" width="55"></el-table-column>
+                <el-table-column type="selection" width="60"></el-table-column>
                 <el-table-column prop="name" label="姓名" style="width: 25%">
                 </el-table-column>
               <el-table-column prop="integral" label="积分" sortable style="width: 25%">
               </el-table-column>
                 <el-table-column prop="phone" label="电话" style="width: 25%">
                 </el-table-column>
-              <el-table-column prop="createTime" label="创建时间" sortable style="width: 20%">
+              <el-table-column prop="createTime" label="创建时间"  sortable style="width: 20%">
               </el-table-column>
-                <el-table-column label="操作" width="180">
+                <el-table-column label="操作" width="200">
                     <template slot-scope="scope">
-                        <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                        <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                      <el-tooltip class="item" effect="dark" content="修改积分" placement="top-end">
+                      <el-button size="small" class="el-icon-d-caret" type="primary" @click="integralEdit(scope.$index)"></el-button>
+                      </el-tooltip>
+                      <el-tooltip class="item" effect="dark" content="修改会员" placement="top">
+                      <el-button size="small" class="el-icon-edit" type="primary" @click="handleEdit(scope.$index, scope.row)"></el-button>
+                      </el-tooltip>
+                      <el-tooltip class="item" effect="dark" content="删除会员" placement="top-start">
+                      <el-button size="small" class="el-icon-delete" type="danger" @click="handleDelete(scope.$index, scope.row)"></el-button>
+                      </el-tooltip>
                     </template>
                 </el-table-column>
             </el-table>
@@ -56,6 +68,33 @@
           <el-button type="primary" @click="addMember('member')">确 定</el-button>
         </div>
       </el-dialog>
+      <!-- 编辑弹出框 -->
+      <el-dialog title="修改会员" :visible.sync="editVisible" width="500px">
+        <el-form :model="member2" :rules="rules" label-width="80px"  ref="member">
+          <el-form-item label="会员名称" prop="name">
+            <el-input v-model="member2.name" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="会员电话" prop="phone">
+            <el-input v-model="member2.phone" auto-complete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="editVisible = false">取 消</el-button>
+          <el-button type="primary" @click="updateMember('member')">确 定</el-button>
+        </div>
+      </el-dialog>
+      <!-- 编辑弹出框 -->
+      <el-dialog title="修改积分" :visible.sync="integralVisible" width="500px">
+        <el-form :model="member2" :rules="rules2" label-width="80px"  ref="member">
+          <el-form-item label="积分变化" aria-placeholder="积分变化数值" prop="integral">
+            <el-input v-model="member2.integral" auto-complete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="integralVisible = false">取 消</el-button>
+          <el-button type="primary" @click="updateMember('member')">确 定</el-button>
+        </div>
+      </el-dialog>
     </div>
 </template>
 
@@ -76,12 +115,20 @@ export default {
       is_search: false,
       editVisible: false,
       delVisible: false,
+      integralVisible: false,
       dialogFormVisible: false,
       member: {
         name: '',
         phone: '',
         integral: '0',
         id: '0'
+      },
+      member2: {
+        name: '',
+        phone: '',
+        integral: '',
+        id: '0',
+        createTime: ''
       },
       rules: {
         name: [
@@ -91,32 +138,16 @@ export default {
           {required: true, message: '请输入会员电话', trigger: 'blur'}
         ]
       },
+      rules2: {
+        integral: [
+          {required: true, message: '请输入变化积分', trigger: 'blur'}
+        ]
+      },
       idx: -1
     }
   },
   created () {
     this.getData()
-  },
-  computed: {
-    data () {
-      return this.tableData.filter((d) => {
-        let is_del = false
-        for (let i = 0; i < this.del_list.length; i++) {
-          if (d.name === this.del_list[i].name) {
-            is_del = true
-            break
-          }
-        }
-        if (!is_del) {
-          if (d.address.indexOf(this.select_cate) > -1 &&
-                            (d.name.indexOf(this.select_word) > -1 ||
-                                d.address.indexOf(this.select_word) > -1)
-          ) {
-            return d
-          }
-        }
-      })
-    }
   },
   methods: {
     // 添加会员
@@ -125,12 +156,29 @@ export default {
       this.$refs[formName].validate((valid) => {
         const form = this.member
         if (valid) {
-          this.$axios.post('/api/MemberCon/add?id=0&integral=0&name=' + form.name + '&phone=' + form.phone)
-          console.log(form)
+          this.$axios.post('/api/MemberCon/add?id=0&integral=0&name=' + form.name + '&phone=' + form.phone).then((res) => {
+            if (res.status === 200) v.getData()
+          })
           v.dialogFormVisible = false
-          this.getData()
         } else {
-          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    updateMember (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$axios.post('/api/MemberCon/updateMember', require('qs').stringify({
+            name: this.member2.name,
+            phone: this.member2.phone,
+            id: this.member2.id,
+            integral: this.member2.integral
+          })).then((res) => {
+            if (res.status === 200) this.getData()
+          })
+          this.editVisible = false
+          this.integralVisible = false
+        } else {
           return false
         }
       })
@@ -140,39 +188,59 @@ export default {
       this.cur_page = val
       this.getData()
     },
-    // 获取 easy-mock 的模拟数据
+
     getData () {
-      this.url = '/api/MemberCon/findAll'
-      this.$axios.post(this.url, {
-        page: this.cur_page
-      }).then((res) => {
-        console.log(res)
-        this.tableData = res.data
-        console.log(this.tableData)
+      this.url = '/api/MemberCon/findAll0'
+      this.$axios.post(this.url, require('qs').stringify({
+        page: this.cur_page,
+        size: '10'
+      })).then((res) => {
+        this.tableData = res.data.content
       })
     },
     search () {
-      this.is_search = true
+      this.$axios.post('/api/MemberCon/memberFind', require('qs').stringify({
+        select_cate: this.select_cate,
+        select_word: this.select_word
+      })).then((res) => {
+        if (res.status === 200) this.tableData=res.data
+      })
     },
     formatter (row, column) {
       return row.address
     },
-    filterTag (value, row) {
-      return row.tag === value
+    integralEdit (index) {
+      this.idx = index
+      const item = this.tableData[index]
+      this.member2 = {
+        name: item.name,
+        phone: item.phone,
+        integral: '',
+        id: item.id,
+        createTime: item.createTime
+      }
+      this.integralVisible = true
     },
     handleEdit (index, row) {
       this.idx = index
       const item = this.tableData[index]
-      this.form = {
+      this.member2 = {
         name: item.name,
-        date: item.date,
-        address: item.address
+        phone: item.phone,
+        integral: item.integral,
+        id: item.id,
+        createTime: item.createTime
       }
       this.editVisible = true
     },
+
     handleDelete (index, row) {
-      this.idx = index
-      this.delVisible = true
+      const item = this.tableData[index]
+      this.$axios.post('/api/MemberCon/deleteMember', require('qs').stringify({
+        id: item.id
+      })).then((res) => {
+        if (res.status === 200) this.getData()
+      })
     },
     delAll () {
       const length = this.multipleSelection.length
@@ -186,18 +254,6 @@ export default {
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
-    },
-    // 保存编辑
-    saveEdit () {
-      this.$set(this.tableData, this.idx, this.form)
-      this.editVisible = false
-      this.$message.success(`修改第 ${this.idx + 1} 行成功`)
-    },
-    // 确定删除
-    deleteRow () {
-      this.tableData.splice(this.idx, 1)
-      this.$message.success('删除成功')
-      this.delVisible = false
     }
   }
 }
@@ -210,7 +266,8 @@ export default {
     }
 
     .handle-select {
-        width: 120px;
+      margin-left: 10px;
+        width: 80px;
     }
 
     .handle-input {
