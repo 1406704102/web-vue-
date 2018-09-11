@@ -48,8 +48,14 @@
                 </el-table-column>
             </el-table>
             <div class="pagination">
-                <el-pagination @current-change="handleCurrentChange" layout="prev, pager, next" :total="1000">
-                </el-pagination>
+              <el-pagination
+                background
+                :page-size=page_size
+                :pager-count=pager_count
+                layout="prev, pager, next"
+                @current-change="handleCurrentChange"
+                :total=date_total>
+              </el-pagination>
             </div>
         </div>
 
@@ -111,6 +117,9 @@ export default {
       multipleSelection: [],
       select_cate: '',
       select_word: '',
+      page_size: 10,
+      pager_count: 5,
+      date_total: 0,
       del_list: [],
       is_search: false,
       editVisible: false,
@@ -174,7 +183,7 @@ export default {
             id: this.member2.id,
             integral: this.member2.integral
           })).then((res) => {
-            if (res.status === 200) this.getData()
+            if (res.status === 200) this.search()
           })
           this.editVisible = false
           this.integralVisible = false
@@ -193,18 +202,25 @@ export default {
       this.url = '/api/MemberCon/findAll0'
       this.$axios.post(this.url, require('qs').stringify({
         page: this.cur_page,
-        size: '10'
+        size: this.page_size
       })).then((res) => {
-        this.tableData = res.data.content
+        if (res.status === 200) {
+          this.tableData = res.data.content
+          this.$axios.post('/api/MemberCon/total').then((res) => {
+            if (res.status === 200) this.date_total = res.data
+          })
+        }
       })
     },
     search () {
-      this.$axios.post('/api/MemberCon/memberFind', require('qs').stringify({
-        select_cate: this.select_cate,
-        select_word: this.select_word
-      })).then((res) => {
-        if (res.status === 200) this.tableData=res.data
-      })
+      if (this.select_cate !== '' && this.select_word !== '') {
+        this.$axios.post('/api/MemberCon/memberFind', require('qs').stringify({
+          select_cate: this.select_cate,
+          select_word: this.select_word
+        })).then((res) => {
+          if (res.status === 200) this.tableData = res.data
+        })
+      } else this.getData()
     },
     formatter (row, column) {
       return row.address
