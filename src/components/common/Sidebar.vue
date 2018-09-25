@@ -3,16 +3,18 @@
     <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse"
              text-color="#bfcbd9" active-text-color="#000" unique-opened router>
       <template v-for="item in items">
+
         <template v-if="item.subs">
-          <el-submenu :index="item.identification" :key="item.index">
+          <el-submenu :index="item.identification" :key="item.identification">
             <template slot="title">
-              <i :class="item.icon"></i><span slot="title">{{ item.title }}</span>
+              <i :class="item.icon"></i><span slot="title">{{ item.name }}</span>
             </template>
             <el-menu-item v-for="(subItem,i) in item.subs" :key="i" :index="subItem.identification">
-              {{ subItem.name }}
+              &nbsp;&nbsp;&nbsp;&nbsp;{{ subItem.name }}
             </el-menu-item>
           </el-submenu>
         </template>
+
         <template v-else>
           <el-menu-item :index="item.identification" :key="item.identification">
             <i :class="item.icon"></i><span slot="title">{{ item.name }}</span>
@@ -67,38 +69,25 @@ export default {
         //   index: '404',
         //   title: '404页面'
         // }
-      ]
+      ],
+      item2: []
     }
   },
   methods: {
     getMenu () {
-      this.$axios.get('/api/menu/findAll').then((res) => {
-        if (res.status === 200) {
-          for (var d in res.data) {
-            if (res.data[d].hasSub === '1') {
-              var itemc = []
-              for (var d2 in res.data) {
-                if (parseInt(res.data[d2].subs) === res.data[d].id) {
-                  alert(res.data[d2].subs)
-                  var json = {identification: res.data[d2].identification, title: res.data[d2].name}
-                  itemc.push(json)
-                  res.data.splice(d2, 1)
+      this.$axios.get('/api/menu/findMenu?level=0').then((res0) => {
+        if (res0.status === 200) {
+          this.items = res0.data
+          res0.data.forEach(f => {
+            if (f.hasSub === '1') {
+              this.$axios.get('/api/menu/findMenu?level=1&subs=' + f.id).then((res1) => {
+                if (res1.status === 200) {
+                  console.log(res1.data)
+                  f.subs = res1.data
                 }
-              }
-              res.data[d].subs = itemc
+              })
             }
-            // if (res.data[d].subs !== null) {
-            //   for (var d2 in res.data) {
-            //     if (res.data[d2].id === res.data[d].subs) {
-            //       res.data[d2].subs=
-            //     }
-            //   }
-            //
-            //   res.data.splice(d, 1)
-            // }
-          }
-          console.log(res.data)
-          this.items = res.data
+          })
         }
       })
     }
