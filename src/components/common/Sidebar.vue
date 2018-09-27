@@ -3,16 +3,33 @@
     <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse"
              text-color="#bfcbd9" active-text-color="#000" unique-opened router>
       <template v-for="item in items">
-
-        <template v-if="item.subs">
+        <template v-if="item.hasSub === '1' ">
           <el-submenu :index="item.identification" :key="item.identification">
             <template slot="title">
               <i :class="item.icon"></i><span slot="title">{{ item.name }}</span>
             </template>
-            <el-menu-item v-for="(subItem,i) in item.subs" :key="i" :index="subItem.identification">
-              &nbsp;&nbsp;&nbsp;&nbsp;{{ subItem.name }}
-            </el-menu-item>
+
+            <template v-for="subItem in item.subs" >
+              <template v-if="subItem.hasSub === '1'">
+                <el-submenu :index="subItem.identification" :key="subItem.identification">
+                  <template slot="title">
+                <span slot="title">&nbsp;&nbsp;&nbsp;&nbsp;{{ subItem.name }}</span>
+                  </template>
+                  <template v-for="(sub2Item,i) in subItem.subs">
+                    <el-menu-item  :key="i" :index="sub2Item.identification">
+                      &nbsp;&nbsp;&nbsp;&nbsp;{{ sub2Item.name }}
+                    </el-menu-item>
+                  </template>
+                </el-submenu>
+              </template>
+              <template v-else>
+                <el-menu-item :index="subItem.identification" :key="subItem.identification">
+                  <span slot="title">&nbsp;&nbsp;&nbsp;&nbsp;{{ subItem.name }}</span>
+                </el-menu-item>
+              </template>
+            </template>
           </el-submenu>
+
         </template>
 
         <template v-else>
@@ -82,8 +99,16 @@ export default {
             if (f.hasSub === '1') {
               this.$axios.get('/api/menu/findMenu?level=1&subs=' + f.id).then((res1) => {
                 if (res1.status === 200) {
-                  console.log(res1.data)
                   f.subs = res1.data
+                  res1.data.forEach(o => {
+                    if (o.hasSub === '1') {
+                      this.$axios.get('/api/menu/findMenu?level=2&subs=' + o.id).then((res2) => {
+                        if (res2.status === 200) {
+                          o.subs = res2.data
+                        }
+                      })
+                    }
+                  })
                 }
               })
             }
