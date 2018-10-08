@@ -12,7 +12,6 @@ export default new Router({
     {
       path: '/',
       component: resolve => require(['../components/common/Home.vue'], resolve),
-      meta: { title: '自述文件' },
       children: [
         {
           path: '/dashboard',

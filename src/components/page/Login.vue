@@ -42,7 +42,8 @@ export default {
       this.$refs[formName].validate((valid) => {
         const from = this.ruleForm
         if (valid) {
-          this.$axios.post('/api/UserCon/findByName?userName=' + from.username).then(function (data) {
+          console.log(from.username)
+          this.$axios.post('/api/UserCon/findByName', require('qs').stringify({'userName': from.username})).then(function (data) {
             if (data.status === 200) {
               localStorage.setItem('ms_username', from.username)
               v.$router.push('/dashboard')
