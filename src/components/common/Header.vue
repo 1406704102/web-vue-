@@ -51,7 +51,7 @@ export default {
     return {
       collapse: false,
       fullscreen: false,
-      name: 'linxin',
+      name: 'pangjie___',
       message: 2
     }
   },
@@ -117,7 +117,7 @@ export default {
     height: 70px;
     font-size: 22px;
     color: #000000;
-    background-color: #244056;
+    background-color: #4198ff;
     border-bottom: 1px;
   }
 
