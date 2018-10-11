@@ -3,21 +3,40 @@
     <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse"
              text-color="#bfcbd9" active-text-color="#000" unique-opened router>
       <template v-for="item in items">
-        <template v-if="item.subs">
-          <el-submenu :index="item.identification" :key="item.index">
-            <template slot="title">
-              <i :class="item.icon"></i><span slot="title">{{ item.title }}</span>
-            </template>
-            <el-menu-item v-for="(subItem,i) in item.subs" :key="i" :index="subItem.identification">
-              {{ subItem.name }}
+          <template v-if="item.hasSub === '1' ">
+            <el-submenu :index="item.identification" :key="item.identification">
+              <template slot="title">
+                <i :class="item.icon"></i><span slot="title">{{ item.name }}</span>
+              </template>
+              <!--<el-menu-item v-for="(subItem,i) in item.subs" :key="i" :index="subItem.identification">-->
+                <!--&nbsp;&nbsp;&nbsp;&nbsp;{{ subItem.name }}-->
+              <!--</el-menu-item>-->
+              <template v-for="subItem in item.subs" >
+                <template v-if="subItem.hasSub === '1'">
+                  <el-submenu :index="subItem.identification" :key="subItem.identification">
+                    <template slot="title">
+                      <span slot="title">&nbsp;&nbsp;&nbsp;&nbsp;{{ subItem.name }}</span>
+                    </template>
+                    <template v-for="(sub2Item,i) in subItem.subs">
+                      <el-menu-item  :key="i" :index="sub2Item.identification">
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{ sub2Item.name }}
+                      </el-menu-item>
+                    </template>
+                  </el-submenu>
+                </template>
+                <template v-else>
+                  <el-menu-item :index="subItem.identification" :key="subItem.identification">
+                    <span slot="title">&nbsp;&nbsp;&nbsp;&nbsp;{{ subItem.name }}</span>
+                  </el-menu-item>
+                </template>
+              </template>
+            </el-submenu>
+          </template>
+          <template v-else>
+            <el-menu-item :index="item.identification" :key="item.identification">
+              <i :class="item.icon"></i><span slot="title">{{ item.name }}</span>
             </el-menu-item>
-          </el-submenu>
-        </template>
-        <template v-else>
-          <el-menu-item :index="item.identification" :key="item.identification">
-            <i :class="item.icon"></i><span slot="title">{{ item.name }}</span>
-          </el-menu-item>
-        </template>
+          </template>
       </template>
     </el-menu>
   </div>
@@ -67,29 +86,34 @@ export default {
         //   index: '404',
         //   title: '404页面'
         // }
-      ]
+      ],
+      item2: []
     }
   },
   methods: {
     getMenu () {
-      this.$axios.get('/api/menu/findAll').then((res) => {
-        if (res.status === 200) {
-          for (var d in res.data) {
-            if (res.data[d].hasSub === '1') {
-              var itemc = []
-              for (var d2 in res.data) {
-                if (parseInt(res.data[d2].subs) === res.data[d].id) {
-                  alert(res.data[d2].subs)
-                  var json = {identification: res.data[d2].identification, title: res.data[d2].name}
-                  itemc.push(json)
-                  res.data.splice(d2, 1)
+      this.$axios.get('/api/menu/findMenu?level=0&userId=' + localStorage.getItem('ms_id')).then((res0) => {
+        if (res0.status === 200) {
+          res0.data.forEach(f => {
+            if (f.hasSub === '1') {
+              this.$axios.get('/api/menu/findMenu?level=1&userId=' + localStorage.getItem('ms_id')).then((res1) => {
+                if (res1.status === 200) {
+                  f.subs = res1.data
+                  res1.data.forEach(o => {
+                    if (o.hasSub === '1') {
+                      this.$axios.get('/api/menu/findMenu?level=2&userId=' + localStorage.getItem('ms_id')).then((res2) => {
+                        if (res2.status === 200) {
+                          o.subs = res2.data
+                        }
+                      })
+                    }
+                  })
                 }
-              }
-              res.data[d].subs = itemc
+              })
             }
-          }
-          console.log(res.data)
-          this.items = res.data
+          })
+          this.items = res0.data
+          console.log(this.items)
         }
       })
     }

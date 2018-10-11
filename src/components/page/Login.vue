@@ -45,6 +45,7 @@ export default {
           this.$axios.post('/api/UserCon/findByName?userName=' + from.username).then(function (data) {
             if (data.status === 200) {
               localStorage.setItem('ms_username', from.username)
+              localStorage.setItem('ms_id', data.data);
               v.$router.push('/dashboard')
             }
           })

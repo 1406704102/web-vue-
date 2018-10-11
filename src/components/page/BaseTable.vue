@@ -8,7 +8,7 @@
         <div class="container">
             <div class="handle-box">
               <el-tooltip class="item" effect="dark" content="添加会员" placement="top">
-                <el-button type="primary" class="el-icon-plus" @click="dialogFormVisible = true"></el-button>
+                <el-button class="el-icon-plus" @click="dialogFormVisible = true"></el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="批量删除" placement="top">
                 <el-button type="danger" class="el-icon-delete" @click="delAll"></el-button>
@@ -36,10 +36,10 @@
                 <el-table-column label="操作" width="200">
                     <template slot-scope="scope">
                       <el-tooltip class="item" effect="dark" content="修改积分" placement="top-end">
-                      <el-button size="small" class="el-icon-d-caret" type="primary" @click="integralEdit(scope.$index)"></el-button>
+                      <el-button size="small" class="el-icon-d-caret" @click="integralEdit(scope.$index)"></el-button>
                       </el-tooltip>
                       <el-tooltip class="item" effect="dark" content="修改会员" placement="top">
-                      <el-button size="small" class="el-icon-edit" type="primary" @click="handleEdit(scope.$index, scope.row)"></el-button>
+                      <el-button size="small" class="el-icon-edit" @click="handleEdit(scope.$index, scope.row)"></el-button>
                       </el-tooltip>
                       <el-tooltip class="item" effect="dark" content="删除会员" placement="top-start">
                       <el-button size="small" class="el-icon-delete" type="danger" @click="handleDelete(scope.$index, scope.row)"></el-button>
