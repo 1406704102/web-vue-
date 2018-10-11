@@ -87,15 +87,6 @@ export default {
               }
               res.data[d].subs = itemc
             }
-            // if (res.data[d].subs !== null) {
-            //   for (var d2 in res.data) {
-            //     if (res.data[d2].id === res.data[d].subs) {
-            //       res.data[d2].subs=
-            //     }
-            //   }
-            //
-            //   res.data.splice(d, 1)
-            // }
           }
           console.log(res.data)
           this.items = res.data
