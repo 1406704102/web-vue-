@@ -8,13 +8,11 @@
         <div class="container">
             <div class="handle-box">
               <el-tooltip class="item" effect="dark" content="添加会员" placement="top">
-                <el-button class="el-icon-plus" @click="dialogFormVisible = true"></el-button>
+                <el-button type="primary" class="el-icon-plus" @click="dialogFormVisible = true"></el-button>
               </el-tooltip>
-              <template v-if="userName === 'admin'">
               <el-tooltip class="item" effect="dark" content="批量删除" placement="top">
                 <el-button type="danger" class="el-icon-delete" @click="delAll"></el-button>
               </el-tooltip>
-              </template>
               <el-select v-model="select_cate" placeholder="筛选项" class="handle-select mr10">
                 <el-option key="1" label="姓名" value="name"></el-option>
                 <el-option key="2" label="电话" value="phone"></el-option>
@@ -38,17 +36,14 @@
                 <el-table-column label="操作" width="200">
                     <template slot-scope="scope">
                       <el-tooltip class="item" effect="dark" content="修改积分" placement="top-end">
-                      <el-button size="small" class="el-icon-d-caret" @click="integralEdit(scope.$index)"></el-button>
+                      <el-button size="small" class="el-icon-d-caret" type="primary" @click="integralEdit(scope.$index)"></el-button>
                       </el-tooltip>
                       <el-tooltip class="item" effect="dark" content="修改会员" placement="top">
-                      <el-button size="small" class="el-icon-edit" @click="handleEdit(scope.$index, scope.row)"></el-button>
+                      <el-button size="small" class="el-icon-edit" type="primary" @click="handleEdit(scope.$index, scope.row)"></el-button>
                       </el-tooltip>
-                      <template v-if="userName === 'admin'">
-                        <el-tooltip class="item" effect="dark" content="删除会员" placement="top-start">
-                          <el-button size="small" class="el-icon-delete" type="danger"
-                                     @click="handleDelete(scope.$index, scope.row)"></el-button>
-                        </el-tooltip>
-                      </template>
+                      <el-tooltip class="item" effect="dark" content="删除会员" placement="top-start">
+                      <el-button size="small" class="el-icon-delete" type="danger" @click="handleDelete(scope.$index, scope.row)"></el-button>
+                      </el-tooltip>
                     </template>
                 </el-table-column>
             </el-table>
@@ -122,7 +117,7 @@ export default {
       multipleSelection: [],
       select_cate: '',
       select_word: '',
-      page_size: 9,
+      page_size: 10,
       pager_count: 5,
       date_total: 0,
       del_list: [],
@@ -157,8 +152,7 @@ export default {
           {required: true, message: '请输入变化积分', trigger: 'blur'}
         ]
       },
-      idx: -1,
-      userName: localStorage.getItem('ms_username')
+      idx: -1
     }
   },
   created () {
@@ -289,7 +283,7 @@ export default {
 
     .handle-select {
       margin-left: 10px;
-        width: 100px;
+        width: 80px;
     }
 
     .handle-input {

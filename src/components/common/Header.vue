@@ -44,70 +44,70 @@
   </div>
 </template>
 <script>
-import bus from '../common/bus'
+  import bus from '../common/bus';
 
-export default {
-  data () {
-    return {
-      collapse: false,
-      fullscreen: false,
-      name: 'pangjie___',
-      message: 2
-    }
-  },
-  computed: {
-    username () {
-      let username = localStorage.getItem('ms_username')
-      return username || this.name
-    }
-  },
-  methods: {
-    // 用户名下拉菜单选择事件
-    handleCommand (command) {
-      if (command === 'loginout') {
-        localStorage.removeItem('ms_username')
-        this.$router.push('/login')
+  export default {
+    data() {
+      return {
+        collapse: false,
+        fullscreen: false,
+        name: 'linxin',
+        message: 2
       }
     },
-    // 侧边栏折叠
-    collapseChage () {
-      this.collapse = !this.collapse
-      bus.$emit('collapse', this.collapse)
-    },
-    // 全屏事件
-    handleFullScreen () {
-      let element = document.documentElement
-      if (this.fullscreen) {
-        if (document.exitFullscreen) {
-          document.exitFullscreen()
-        } else if (document.webkitCancelFullScreen) {
-          document.webkitCancelFullScreen()
-        } else if (document.mozCancelFullScreen) {
-          document.mozCancelFullScreen()
-        } else if (document.msExitFullscreen) {
-          document.msExitFullscreen()
-        }
-      } else {
-        if (element.requestFullscreen) {
-          element.requestFullscreen()
-        } else if (element.webkitRequestFullScreen) {
-          element.webkitRequestFullScreen()
-        } else if (element.mozRequestFullScreen) {
-          element.mozRequestFullScreen()
-        } else if (element.msRequestFullscreen) {
-          // IE11
-          element.msRequestFullscreen()
-        }
+    computed: {
+      username() {
+        let username = localStorage.getItem('ms_username')
+        return username || this.name
       }
-      this.fullscreen = !this.fullscreen
+    },
+    methods: {
+      // 用户名下拉菜单选择事件
+      handleCommand(command) {
+        if (command === 'loginout') {
+          localStorage.removeItem('ms_username')
+          this.$router.push('/login')
+        }
+      },
+      // 侧边栏折叠
+      collapseChage() {
+        this.collapse = !this.collapse
+        bus.$emit('collapse', this.collapse)
+      },
+      // 全屏事件
+      handleFullScreen() {
+        let element = document.documentElement
+        if (this.fullscreen) {
+          if (document.exitFullscreen) {
+            document.exitFullscreen()
+          } else if (document.webkitCancelFullScreen) {
+            document.webkitCancelFullScreen()
+          } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen()
+          } else if (document.msExitFullscreen) {
+            document.msExitFullscreen()
+          }
+        } else {
+          if (element.requestFullscreen) {
+            element.requestFullscreen()
+          } else if (element.webkitRequestFullScreen) {
+            element.webkitRequestFullScreen()
+          } else if (element.mozRequestFullScreen) {
+            element.mozRequestFullScreen()
+          } else if (element.msRequestFullscreen) {
+            // IE11
+            element.msRequestFullscreen()
+          }
+        }
+        this.fullscreen = !this.fullscreen
+      }
+    },
+    mounted() {
+      if (document.body.clientWidth < 1500) {
+        this.collapseChage()
+      }
     }
-  },
-  mounted () {
-    if (document.body.clientWidth < 1500) {
-      this.collapseChage()
-    }
-  }
-}
+  };
 </script>
 <style scoped>
   .header {
@@ -117,7 +117,7 @@ export default {
     height: 70px;
     font-size: 22px;
     color: #000000;
-    background-color: #4198ff;
+    background-color: #2D8CF0;
     border-bottom: 1px;
   }
 
