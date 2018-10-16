@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
 Vue.use(Router)
 
 export default new Router({
@@ -39,6 +38,11 @@ export default new Router({
           path: '/permission',
           component: resolve => require(['../components/page/Permission.vue'], resolve),
           meta: { title: '权限测试', permission: true }
+        },
+        {
+          path: '/users',
+          component: resolve => require(['../components/page/userTable.vue'], resolve),
+          meta: { title: '用户' }
         }
       ]
     },

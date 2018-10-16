@@ -24,7 +24,7 @@
 
           <!--表格-->
             <el-table :data="tableData" stripe border style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange">
-                <el-table-column type="selection" width="60"></el-table-column>
+                <el-table-column type="selection" width="35"></el-table-column>
                 <el-table-column prop="name" label="姓名" style="width: 25%">
                 </el-table-column>
               <el-table-column prop="integral" label="积分" sortable style="width: 25%">

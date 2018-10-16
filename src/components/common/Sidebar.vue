@@ -113,7 +113,6 @@ export default {
             }
           })
           this.items = res0.data
-          console.log(this.items)
         }
       })
     }
