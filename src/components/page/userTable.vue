@@ -137,8 +137,6 @@ export default {
       }, 10)
     },
     updateRole () {
-      console.log(this.$refs.tree.getCheckedKeys())
-      console.log(this.user.id)
       this.$axios.post('/api/UserCon/updateRole', require('qs').stringify({
         id: this.user.id,
         role: this.$refs.tree.getCheckedKeys().join(',')
