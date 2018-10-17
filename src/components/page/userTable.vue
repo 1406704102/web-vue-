@@ -8,7 +8,7 @@
       <el-table-column label="操作" width="200">
         <template slot-scope="user">
           <el-tooltip class="item" effect="dark" content="修改权限" placement="top-end">
-            <el-button size="mini" class="icon-ali-browse_fill" @click="updateRole(user.$index,user.row)"></el-button>
+            <el-button size="mini" class="icon-ali-browse_fill" @click="updateRolePage(user.$index,user.row)"></el-button>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="修改用户" placement="top">
             <el-button size="mini " class="icon-ali-brush_fill" @click="updatePage(user.$index, user.row)"></el-button>
@@ -38,11 +38,13 @@
     </el-dialog>
 
     <el-dialog title="修改权限" :visible.sync="userRoleVisible" width="500px">
-      {{user.role}}
-
+      <el-tree :data="menuData" show-checkbox node-key="id" :default-expand-all=true ref="tree" :props="defaultProps">
+      </el-tree>
+      <!--<el-button @click="setKeys">通过 key 设置</el-button>-->
+      <!--<el-button @click="reset">清空</el-button>-->
       <div slot="footer" class="dialog-footer">
         <el-button @click="userRoleVisible = false">取 消</el-button>
-        <el-button type="primary" @click="userRoleVisible = false">确 定</el-button>
+        <el-button type="primary" @click="updateRole">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -54,6 +56,13 @@ export default {
   data () {
     return {
       tableData: [],
+      menuData: [],
+      menuData2: [],
+      checkedKeys: [],
+      defaultProps: {
+        children: 'children',
+        label: 'label'
+      },
       user: {
         id: '',
         userName: '',
@@ -74,14 +83,46 @@ export default {
   },
   created () {
     this.getUsers()
+    this.getMenu()
   },
   methods: {
+    getMenu () {
+      this.$axios.post('/api/menu/findByLevel', require('qs').stringify({
+        level: 0
+      })).then((res) => {
+        if (res.status === 200) {
+          res.data.forEach(f => {
+            if (f.hasSub === '1') {
+              this.$axios.post('/api/menu/findByLevel', require('qs').stringify({
+                level: 1
+              })).then((res1) => {
+                if (res1.status === 200) {
+                  f.children = res1.data
+                  res1.data.forEach(o => {
+                    if (o.hasSub === '1') {
+                      this.$axios.post('/api/menu/findByLevel', require('qs').stringify({
+                        level: 2
+                      })).then((res2) => {
+                        if (res2.status === 200) {
+                          o.children = res2.data
+                        }
+                      })
+                    }
+                  })
+                }
+              })
+            }
+          })
+          this.menuData = res.data
+        }
+      })
+    },
     getUsers () {
       this.$axios.post('/api/UserCon/findAll').then((res) => {
         if (res.status === 200) this.tableData = res.data
       })
     },
-    updateRole(index,row){
+    updateRolePage (index, row) {
       const item = this.tableData[index]
       this.user = {
         id: item.id,
@@ -89,7 +130,21 @@ export default {
         passWord: item.passWord,
         role: item.role
       }
+      this.checkedKeys = item.role.split(',')
       this.userRoleVisible = true
+      setTimeout(() => { // 树加载完之后在勾选
+        this.$refs.tree.setCheckedKeys(this.checkedKeys)
+      }, 10)
+    },
+    updateRole () {
+      console.log(this.$refs.tree.getCheckedKeys())
+      console.log(this.user.id)
+      this.$axios.post('/api/UserCon/updateRole', require('qs').stringify({
+        id: this.user.id,
+        role: this.$refs.tree.getCheckedKeys().join(',')
+      }))
+      this.userRoleVisible = false
+      location.reload()
     },
     updatePage (index, row) {
       const item = this.tableData[index]
@@ -101,7 +156,7 @@ export default {
       }
       this.userVisible = true
     },
-    updateUser (formName) {
+    updateUser () {
       this.$axios.post('/api/UserCon/updateUser', require('qs').stringify({
         id: this.user.id,
         userName: this.user.userName,

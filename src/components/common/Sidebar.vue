@@ -6,27 +6,27 @@
           <template v-if="item.hasSub === '1' ">
             <el-submenu :index="item.identification" :key="item.identification">
               <template slot="title">
-                <i :class="item.icon"></i><span slot="title">{{ item.name }}</span>
+                <i :class="item.icon"></i><span slot="title">{{ item.label }}</span>
               </template>
               <!--<el-menu-item v-for="(subItem,i) in item.subs" :key="i" :index="subItem.identification">-->
-                <!--&nbsp;&nbsp;&nbsp;&nbsp;{{ subItem.name }}-->
+                <!--&nbsp;&nbsp;&nbsp;&nbsp;{{ subItem.label }}-->
               <!--</el-menu-item>-->
               <template v-for="subItem in item.subs" >
                 <template v-if="subItem.hasSub === '1'">
                   <el-submenu :index="subItem.identification" :key="subItem.identification">
                     <template slot="title">
-                      <span slot="title">&nbsp;&nbsp;&nbsp;&nbsp;{{ subItem.name }}</span>
+                      <span slot="title">&nbsp;&nbsp;&nbsp;&nbsp;{{ subItem.label }}</span>
                     </template>
                     <template v-for="(sub2Item,i) in subItem.subs">
                       <el-menu-item  :key="i" :index="sub2Item.identification">
-                        &nbsp;&nbsp;&nbsp;&nbsp;{{ sub2Item.name }}
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{ sub2Item.label }}
                       </el-menu-item>
                     </template>
                   </el-submenu>
                 </template>
                 <template v-else>
                   <el-menu-item :index="subItem.identification" :key="subItem.identification">
-                    <span slot="title">&nbsp;&nbsp;&nbsp;&nbsp;{{ subItem.name }}</span>
+                    <span slot="title">&nbsp;&nbsp;&nbsp;&nbsp;{{ subItem.label }}</span>
                   </el-menu-item>
                 </template>
               </template>
@@ -34,7 +34,7 @@
           </template>
           <template v-else>
             <el-menu-item :index="item.identification" :key="item.identification">
-              <i :class="item.icon"></i><span slot="title">{{ item.name }}</span>
+              <i :class="item.icon"></i><span slot="title">{{ item.label }}</span>
             </el-menu-item>
           </template>
       </template>
