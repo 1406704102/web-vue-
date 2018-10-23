@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <div class="ms-title">后台管理系统</div>
+  <div class="login-wrap">
     <div class="ms-login">
+      <div class="ms-title">后台管理系统</div>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm">
         <el-form-item prop="username">
           <el-input v-model="ruleForm.username" placeholder="username"></el-input>
@@ -45,7 +45,7 @@ export default {
           this.$axios.post('/api/UserCon/findByName?userName=' + from.username).then(function (data) {
             if (data.status === 200) {
               localStorage.setItem('ms_username', from.username)
-              localStorage.setItem('ms_id', data.data);
+              localStorage.setItem('ms_id', data.data)
               v.$router.push('/dashboard')
             }
           })
@@ -60,12 +60,22 @@ export default {
 </script>
 
 <style scoped>
-
+  .login-wrap{
+    background-image: url(../../assets/sign_bg.png);
+    background-repeat: no-repeat;
+    background-color: #b8e5f8;
+    background-size: cover;
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
+    padding-right: 15px;
+  }
   .ms-title {
     position: absolute;
     top: 50%;
-    width: 100%;
-    margin-top: -230px;
+    left: 50%;
+    width: 300px;
+    margin: -120px 0 0 -150px;
     text-align: center;
     font-size: 30px;
   }
@@ -77,11 +87,9 @@ export default {
     width: 300px;
     height: 160px;
     margin: -150px 0 0 -190px;
-    padding: 40px;
-    border-radius: 5px;
-    background: #fff;
+    padding: 120px 40px 40px;
+    background-color:#ffffff ;
   }
-
   .login-btn {
     text-align: center;
   }
@@ -89,5 +97,16 @@ export default {
   .login-btn button {
     width: 100%;
     height: 36px;
+  }
+
+  .input-v{
+  border-color: #878787;
+    border-style: solid;
+    border-top-width: 0px;
+    border-right-width: 0px;
+    border-bottom-width: 1px;
+    border-left-width: 0px;
+    width: 100%;
+    height: 20px;
   }
 </style>

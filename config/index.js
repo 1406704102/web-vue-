@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://127.0.0.1:8080/',
+        target: 'http://127.0.0.1:8080/api/',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
@@ -77,7 +77,7 @@ module.exports = {
     productionGzipExtensions: ['js', 'css'],
 
     // Run the build command with an extra argument to
-    // View the bundle analyzer report after build finishes:
+    // View the bundle analyzer report after build finishes:Your application is running here
     // `npm run build --report`
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report
