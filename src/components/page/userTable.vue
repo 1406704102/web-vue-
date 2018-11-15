@@ -105,6 +105,15 @@ export default {
                       })).then((res2) => {
                         if (res2.status === 200) {
                           o.children = res2.data
+                          res2.data.forEach(r => {
+                            if (r.hasSub === '1') {
+                              this.$axios.get('/api/menu/findMenu?level=3&userId=' + localStorage.getItem('ms_id')).then((res3) => {
+                                if (res3.status === 200) {
+                                  r.subs = res3.data
+                                }
+                              })
+                            }
+                          })
                         }
                       })
                     }

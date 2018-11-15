@@ -205,7 +205,7 @@ export default {
         size: this.page_size
       })).then((res) => {
         if (res.status === 200) {
-          this.tableData = res.data.content
+          this.tableData = res.data
           this.$axios.post('/api/MemberCon/total').then((res) => {
             if (res.status === 200) this.date_total = res.data
           })

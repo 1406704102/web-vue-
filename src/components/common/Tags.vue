@@ -10,7 +10,7 @@
         </ul>
         <div class="tags-close-box">
             <el-dropdown @command="handleTags">
-                <el-button size="mini" type="primary">
+                <el-button size="mini" type="info">
                     标签选项<i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
                 <el-dropdown-menu size="small" slot="dropdown">
@@ -41,13 +41,15 @@ export default {
       if (item) {
         delItem.path === this.$route.fullPath && this.$router.push(item.path)
       } else {
-        this.$router.push('/')
+        // location.reload()
+        this.$router.push('/dashboard')
       }
     },
     // 关闭全部标签
     closeAll () {
       this.tagsList = []
-      this.$router.push('/')
+      // location.reload()
+      this.$router.push('/dashboard')
     },
     // 关闭其他标签
     closeOther () {

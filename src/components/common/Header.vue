@@ -4,7 +4,7 @@
     <div class="collapse-btn" @click="collapseChage">
       <i class="el-icon-menu"></i>
     </div>
-    <div class="logo">后台管理系统</div>
+    <div class="logo">{{weather.city}}  {{weather.type}}(<i class="icon-ali-packup"></i>{{weather.high}} <i class="icon-ali-unfold"></i>{{weather.low}})</div>
     <div class="header-right">
       <div class="header-user-con">
         <!-- 全屏显示 -->
@@ -30,7 +30,7 @@
                         {{username}} <i class="el-icon-caret-bottom"></i>
                     </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
+            <el-dropdown-item command="loginout" class="fontColor">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -39,14 +39,23 @@
 </template>
 <script>
 import bus from '../common/bus'
-
+// const jsonp = require('jsonp')
 export default {
   data () {
     return {
       collapse: false,
       fullscreen: false,
-      name: 'linxin',
-      message: 2
+      name: 'pangjie',
+      message: 2,
+      weather: {
+        city: '',
+        date: '',
+        high: '',
+        fengli: '',
+        low: '',
+        fengxiang: '',
+        type: '🌤'
+      }
     }
   },
   computed: {
@@ -94,12 +103,33 @@ export default {
         }
       }
       this.fullscreen = !this.fullscreen
+    },
+    getWeather () {
+      this.$axios('https://www.apiopen.top/weatherApi?city=重庆').then((res) => {
+        console.log(res.data.data.city)
+        if (res.data.code === 200) {
+          this.weather.city = res.data.data.city
+          this.weather.type = res.data.data.forecast[0].type
+          this.weather.high = res.data.data.forecast[0].high.substr(3)
+          this.weather.low = res.data.data.forecast[0].low.substr(3)
+        }
+      })
     }
   },
   mounted () {
     if (document.body.clientWidth < 1500) {
       this.collapseChage()
     }
+  },
+  created () {
+    this.getWeather()
+    // jsonp('https://3g.163.com/all/article/DVHIDF8D00097U7T.html', null, (err, data) => {
+    //   if (err) {
+    //     console.log(err)
+    //   } else {
+    //     console.log(data)
+    //   }
+    // })
   }
 }
 </script>
@@ -110,42 +140,35 @@ export default {
     width: 100%;
     height: 70px;
     font-size: 22px;
-    color: #000000;
-    background-color: #2D8CF0;
-    border-bottom: 1px;
+    color: #fff;
   }
-
-  .collapse-btn {
+  .collapse-btn{
     float: left;
     padding: 0 21px;
     cursor: pointer;
     line-height: 70px;
+    background-color: #242f42;
   }
-
-  .header .logo {
+  .header .logo{
     float: left;
-    width: 250px;
+    width:250px;
     line-height: 70px;
   }
-
-  .header-right {
+  .header-right{
     float: right;
     padding-right: 50px;
   }
-
-  .header-user-con {
+  .header-user-con{
     display: flex;
     height: 70px;
     align-items: center;
   }
-
-  .btn-fullscreen {
+  .btn-fullscreen{
     transform: rotate(45deg);
     margin-right: 5px;
     font-size: 24px;
   }
-
-  .btn-bell, .btn-fullscreen {
+  .btn-bell, .btn-fullscreen{
     position: relative;
     width: 30px;
     height: 30px;
@@ -153,8 +176,7 @@ export default {
     border-radius: 15px;
     cursor: pointer;
   }
-
-  .btn-bell-badge {
+  .btn-bell-badge{
     position: absolute;
     right: 0;
     top: -2px;
@@ -164,28 +186,26 @@ export default {
     background: #f56c6c;
     color: #fff;
   }
-
-  .btn-bell .el-icon-bell {
+  .btn-bell .el-icon-bell{
     color: #fff;
   }
-
-  .user-name {
+  .user-name{
     margin-left: 10px;
   }
-
-  .user-avator {
+  .user-avator{
     margin-left: 20px;
   }
-
-  .user-avator img {
+  .user-avator img{
     display: block;
-    width: 40px;
-    height: 40px;
+    width:40px;
+    height:40px;
     border-radius: 50%;
   }
-
-  .el-dropdown-link {
+  .el-dropdown-link{
     color: #fff;
     cursor: pointer;
+  }
+  .el-dropdown-menu__item{
+    text-align: center;
   }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="sidebar">
-    <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse"
-             text-color="#bfcbd9" active-text-color="#000" unique-opened router>
+    <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse"  background-color="#324157"
+             text-color="#fff" active-text-color="#20a0ff" unique-opened router>
       <template v-for="item in items">
           <template v-if="item.hasSub === '1' ">
             <el-submenu :index="item.identification" :key="item.identification">
@@ -104,6 +104,15 @@ export default {
                       this.$axios.get('/api/menu/findMenu?level=2&userId=' + localStorage.getItem('ms_id')).then((res2) => {
                         if (res2.status === 200) {
                           o.subs = res2.data
+                          res2.data.forEach(r => {
+                            if (r.hasSub === '1') {
+                              this.$axios.get('/api/menu/findMenu?level=3&userId=' + localStorage.getItem('ms_id')).then((res3) => {
+                                if (res3.status === 200) {
+                                  r.subs = res3.data
+                                }
+                              })
+                            }
+                          })
                         }
                       })
                     }
@@ -116,6 +125,34 @@ export default {
         }
       })
     }
+    // ,
+    // test () {
+    //   this.$axios.get('/api/menu/findAll').then((res) => {
+    //     if (res.status === 200) {
+    //       // console.log(res.data);
+    //       let data = res.data
+    //       for (let l = 0; l < data.length; l++) {
+    //         if (data[l].hasSub !== null) {
+    //           this.$axios.get('/api/menu/findBySubs?sub=' + data[l].id).then((res2) => {
+    //             if (res2.status === 200) {
+    //               if (res2.data.length !== 0) {
+    //                 data[l].subs = res2.data
+    //                 // for (let e = 0; e < res2.data.length; e++) {
+    //                 //   for (let t = 0; t < data.length; t++) {
+    //                 //     if (data[t].id === res2.data[e].id) {
+    //                 //       data.splice(t,1)
+    //                 //     }
+    //                 //   }
+    //                 // }
+    //               }
+    //             }
+    //           })
+    //         }
+    //       }
+    //       console.log(res.data)
+    //     }
+    //   })
+    // }
   },
   computed: {
     onRoutes () {
@@ -123,6 +160,7 @@ export default {
     }
   },
   created () {
+    // this.test()
     this.getMenu()
     // 通过 Event Bus 进行组件间通信，来折叠侧边栏
     bus.$on('collapse', msg => {
