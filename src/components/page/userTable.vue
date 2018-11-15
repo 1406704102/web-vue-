@@ -148,7 +148,7 @@ export default {
     updateRole () {
       this.$axios.post('/api/UserCon/updateRole', require('qs').stringify({
         id: this.user.id,
-        role: this.$refs.tree.getCheckedKeys().join(',')
+        role: this.$refs.tree.getHalfCheckedKeys().join(',') + ',' + this.$refs.tree.getCheckedKeys().join(',')
       }))
       this.userRoleVisible = false
       location.reload()

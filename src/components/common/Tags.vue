@@ -119,7 +119,7 @@ export default {
         background: #fff;
         padding: 0 5px 0 12px;
         vertical-align: middle;
-        color: #666;
+        color: #242f42;
         -webkit-transition: all .3s ease-in;
         -moz-transition: all .3s ease-in;
         transition: all .3s ease-in;
