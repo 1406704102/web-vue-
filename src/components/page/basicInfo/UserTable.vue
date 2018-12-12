@@ -107,7 +107,7 @@ export default {
                           o.children = res2.data
                           res2.data.forEach(r => {
                             if (r.hasSub === '1') {
-                              this.$axios.get('/api/menu/findMenu?level=3&userId=' + localStorage.getItem('ms_id')).then((res3) => {
+                              this.$axios.get('/api/menu/findMenu?level=3&userName=' + localStorage.getItem('ms_username')).then((res3) => {
                                 if (res3.status === 200) {
                                   r.subs = res3.data
                                 }

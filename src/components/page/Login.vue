@@ -12,6 +12,8 @@
         </el-form-item>
         <div class="login-btn">
           <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+          <el-button :plain="true" @click="failLogin()">错误</el-button>
+
         </div>
       </el-form>
     </div>
@@ -44,9 +46,13 @@ export default {
         if (valid) {
           this.$axios.post('/api/UserCon/findByName?userName=' + from.username).then(function (data) {
             if (data.status === 200) {
-              localStorage.setItem('ms_username', from.username)
-              localStorage.setItem('ms_id', data.data)
-              v.$router.push('/dashboard')
+              if (data.data) {
+                localStorage.setItem('ms_username', from.username)
+                v.$router.push('/dashboard')
+              } else {
+                v.failLogin()
+                return false
+              }
             }
           })
         } else {
@@ -54,6 +60,11 @@ export default {
           return false
         }
       })
+    },
+    failLogin () {
+      this.$message.error('用户名或密码错误!')
+      this.ruleForm.username = ''
+      this.ruleForm.password = ''
     }
   }
 }

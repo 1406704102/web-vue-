@@ -20,8 +20,8 @@ export default new Router({
         },
         {
           path: '/table',
-          component: resolve => require(['../components/page/BaseTable.vue'], resolve),
-          meta: { title: '基础表格' }
+          component: resolve => require(['../components/page/basicInfo/BaseTable.vue'], resolve),
+          meta: { title: '会员基本信息' }
         },
         {
           path: '/tabs',
@@ -30,18 +30,23 @@ export default new Router({
         },
         {
           path: '/form',
-          component: resolve => require(['../components/page/BaseForm.vue'], resolve),
+          component: resolve => require(['../components/page/basicInfo/BaseForm.vue'], resolve),
           meta: { title: '基本表单' }
+        },
+        {
+          path: '/product',
+          component: resolve => require(['../components/page/basicInfo/Product.vue'], resolve),
+          meta: {title: '产品基本信息'}
         },
         {
           // 权限页面
           path: '/permission',
-          component: resolve => require(['../components/page/Permission.vue'], resolve),
+          component: resolve => require(['../components/page/basicInfo/Permission.vue'], resolve),
           meta: { title: '权限测试', permission: true }
         },
         {
           path: '/users',
-          component: resolve => require(['../components/page/userTable.vue'], resolve),
+          component: resolve => require(['../components/page/basicInfo/UserTable.vue'], resolve),
           meta: { title: '用户' }
         }
       ]
@@ -52,11 +57,11 @@ export default new Router({
     },
     {
       path: '/404',
-      component: resolve => require(['../components/page/404.vue'], resolve)
+      component: resolve => require(['../components/page/basicInfo/404.vue'], resolve)
     },
     {
       path: '/403',
-      component: resolve => require(['../components/page/403.vue'], resolve)
+      component: resolve => require(['../components/page/basicInfo/403.vue'], resolve)
     },
     {
       path: '*',
