@@ -8,18 +8,18 @@
         <div class="container">
             <div class="handle-box">
               <el-tooltip class="item" effect="dark" content="添加会员" placement="top">
-                <el-button class="el-icon-plus" @click="dialogFormVisible = true"></el-button>
+                <el-button class="el-icon-plus" @click="dialogFormVisible = true" size="mini" round></el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="批量删除" placement="top">
-                <el-button type="danger" class="el-icon-delete" @click="delAll"></el-button>
-              </el-tooltip>
-              <el-select v-model="select_cate" placeholder="筛选项" class="handle-select mr10">
+                <el-button type="danger" class="el-icon-delete" @click="delAll" size="mini" round></el-button>
+              </el-tooltip>&nbsp;
+              <el-select v-model="select_cate" placeholder="筛选项" class="handle-select mr10" size="mini" round>
                 <el-option key="1" label="姓名" value="name"></el-option>
                 <el-option key="2" label="电话" value="phone"></el-option>
                 <el-option key="3" label="积分" value="integral"></el-option>
               </el-select>
-              <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10"></el-input>
-              <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
+              <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10" size="mini" round></el-input>&nbsp;&nbsp;
+              <el-button type="primary" icon="el-icon-search" @click="search" size="mini" round>搜索</el-button>
             </div>
 
           <!--表格-->
@@ -36,13 +36,13 @@
                 <el-table-column label="操作" width="200">
                     <template slot-scope="scope">
                       <el-tooltip class="item" effect="dark" content="修改积分" placement="top-end">
-                      <el-button size="small" class="el-icon-d-caret" @click="integralEdit(scope.$index)"></el-button>
+                      <el-button  size="mini" round class="el-icon-d-caret" @click="integralEdit(scope.$index)"></el-button>
                       </el-tooltip>
                       <el-tooltip class="item" effect="dark" content="修改会员" placement="top">
-                      <el-button size="small" class="el-icon-edit" @click="handleEdit(scope.$index, scope.row)"></el-button>
+                      <el-button  size="mini" round class="el-icon-edit" @click="handleEdit(scope.$index, scope.row)"></el-button>
                       </el-tooltip>
                       <el-tooltip class="item" effect="dark" content="删除会员" placement="top-start">
-                      <el-button size="small" class="el-icon-delete" type="danger" @click="handleDelete(scope.$index, scope.row)"></el-button>
+                      <el-button  size="mini" round class="el-icon-delete" type="danger" @click="handleDelete(scope.$index, scope.row)"></el-button>
                       </el-tooltip>
                     </template>
                 </el-table-column>

@@ -12,7 +12,6 @@
         </el-form-item>
         <div class="login-btn">
           <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-          <el-button :plain="true" @click="failLogin()">错误</el-button>
 
         </div>
       </el-form>
