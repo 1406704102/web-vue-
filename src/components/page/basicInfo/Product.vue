@@ -62,7 +62,16 @@
           <el-row>
             <el-col :span="22">
               <el-form-item label="图片">
-              <el-input v-model="product.img" auto-complete="off"></el-input>
+                <el-upload
+                  :multiple="multiple"
+                  list-type="picture-card"
+                  :auto-upload="false"
+                  :http-request="uploadFile"
+                  ref="upload"
+                >
+                  <i class="el-icon-plus"></i>
+                </el-upload>
+              <!--<el-input v-model="product.img" auto-complete="off"></el-input>-->
              </el-form-item>
             </el-col>
           </el-row>
@@ -102,14 +111,16 @@ export default {
           {required: true, message: '请输入自编码', trigger: 'blur'}
         ],
         price: [
-          {required: true, message: '请输入价格', trigger: 'blur'},
+          {required: true, message: '请输入价格', trigger: 'blur'}
           // {type: 'number', message: '价格必须为数字值'}
         ]
       },
       cur_page: 1,
-      page_size: 3,
+      page_size: 9,
       pager_count: 5,
       data_total: 0,
+      multiple: true,
+      formDate: '',
       addFormVisible: false
     }
   },
@@ -132,22 +143,43 @@ export default {
         }
       })
     },
+    uploadFile (file) {
+      this.formDate.append('file', file.file)
+    },
     addProduct (formName) {
       const v = this
       this.$refs[formName].validate((valid) => {
         const form = this.product
         if (valid) {
-          this.$axios.post('/api/ProductCon/add', require('qs').stringify({
-            id: 0,
-            name: form.name,
-            img: form.img,
-            price: form.price,
-            selfCode: form.selfCode,
-            description: form.description,
-          })).then((res) => {
+          this.formDate = new FormData()
+          this.$refs.upload.submit()
+          this.formDate.append('id', 0)
+          this.formDate.append('name', form.name)
+          this.formDate.append('price', form.price)
+          this.formDate.append('selfCode', form.selfCode)
+          this.formDate.append('description', form.description)
+          let config = {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }
+          this.$axios.post('/api/ProductCon/add', this.formDate, config).then(res => {
             if (res.status === 200) v.getData()
+          }).catch(res => {
+            console.log(res)
           })
-          v.dialogFormVisible = false
+          v.addFormVisible = false
+
+          // this.$axios.post('/api/ProductCon/add', require('qs').stringify({
+          //   id: 0,
+          //   name: form.name,
+          //   img: form.img,
+          //   price: form.price,
+          //   selfCode: form.selfCode,
+          //   description: form.description
+          // })).then((res) => {
+          //   if (res.status === 200) v.getData()
+          // })
         } else {
           return false
         }
