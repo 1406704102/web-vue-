@@ -7,9 +7,11 @@ import ElementUI from 'element-ui'
 import axios from 'axios'
 import 'element-ui/lib/theme-chalk/index.css'
 import '../static/css/iconfont.css'
+import uploader from 'vue-simple-uploader'
 
 Vue.prototype.$axios = axios
 Vue.use(ElementUI)
+Vue.use(uploader)
 Vue.config.productionTip = false
 /* eslint-disable no-new */
 // 使用钩子函数对路由进行权限跳转
@@ -22,8 +24,11 @@ router.beforeEach((to, from, next) => {
   }
 })
 new Vue({
+  render (createElement) {
+    return createElement(App)
+  },
   el: '#app',
   router,
-  components: { App },
+  components: {App},
   template: '<App/>'
 })

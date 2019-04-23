@@ -1,5 +1,18 @@
 <template>
   <div class="login-wrap">
+    <uploader :options="options" class="uploader-example">
+      <uploader-unsupport></uploader-unsupport>
+      <uploader-drop>
+        <p>Drop files here to upload or</p>
+        <uploader-btn>select files</uploader-btn>
+        <uploader-btn :attrs="attrs">select images</uploader-btn>
+        <uploader-btn :directory="true">select folder</uploader-btn>
+      </uploader-drop>
+      <uploader-list></uploader-list>
+    </uploader>
+    <a href="javascript:;" class="input-file input-fileup" >
+      <i class="iconfont icon-beike"></i>&nbsp;选择文件夹<input ref="file"  class="fileUploaderClass" type='file' name="file" webkitdirectory style="position: absolute;left: 50%;top: 20px;" @change.stop="changesData"/>
+    </a>
     <div class="ms-login">
       <div class="ms-title">SpringBoot + Kotlin</div>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm">
@@ -34,6 +47,14 @@ export default {
         password: [
           {required: true, message: '请输入密码', trigger: 'blur'}
         ]
+      },
+      options: {
+        // 可通过 https://github.com/simple-uploader/Uploader/tree/develop/samples/Node.js 示例启动服务
+        target: '/api/interface/files',
+        testChunks: false
+      },
+      attrs: {
+        accept: 'image/*'
       }
     }
   },
@@ -64,11 +85,28 @@ export default {
       this.$message.error('用户名或密码错误!')
       this.ruleForm.username = ''
       this.ruleForm.password = ''
+    },
+    changesData () {
+      let formdata = new FormData()
+      let config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+      var v = []
+      var v2 = []
+      v = this.$refs.file.files
+      for (var a = 0; a < v.length; a++) {
+        v2[a] = v[a]
+      }
+      console.log(v2)
+      formdata.append('file', v2)
+      this.$axios.post('/api/interface/fileList', formdata, config)
     }
+
   }
 }
 </script>
-
 <style scoped>
   .login-wrap{
     background-image: url(../../assets/sign_bg.png);
@@ -118,5 +156,21 @@ export default {
     border-left-width: 0px;
     width: 100%;
     height: 20px;
+  }
+  .uploader-example {
+    width: 880px;
+    padding: 15px;
+    margin: 40px auto 0;
+    font-size: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .4);
+  }
+  .uploader-example .uploader-btn {
+    margin-right: 4px;
+  }
+  .uploader-example .uploader-list {
+    max-height: 440px;
+    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 </style>

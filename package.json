@@ -19,7 +19,10 @@
     "element-ui": "^2.4.4",
     "jsonp": "^0.2.1",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vue-simple-upload": "^0.1.6",
+    "vue-simple-uploader": "^0.7.0",
+    "vue-upload-component": "^2.8.19"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
