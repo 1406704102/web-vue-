@@ -33,7 +33,7 @@
                           <span>上传插件</span>
                         </div>
                         <a href="javascript:;" class="file" >选择插件父目录
-                          <input ref="file"  class="fileUploaderClass" type='file' name="file" webkitdirectory @change.stop="changesData"/>
+                          <input ref="file"  class="fileUploaderClass" type='file' name="file" webkitdirectory @change.stop="test"/>
                         </a>
                       </el-card>
                     </el-col>
@@ -177,6 +177,23 @@ export default {
           t.$message.error('上传错误!!')
         }
       })
+    },
+    test () {
+      var v = []
+      v = this.$refs.file.files
+      if (v[0].webkitRelativePath.includes('BaiduNetdiskDownload')) {
+        for (var a = 0; a < v.length; a++) {
+          if (v[a].webkitRelativePath.includes('Google Camera')) {
+            console.log(v[a].webkitRelativePath)
+          }
+        }
+        this.$message({
+          message: '上传成功!!',
+          type: 'success'
+        })
+      } else {
+        this.$message.error('请选择目录!!')
+      }
     }
   }
 }
@@ -319,7 +336,7 @@ export default {
       display: inline-block;
       background: #D0EEFF;
       border: 1px solid #99D3F5;
-      border-radius: 4px;
+      border-radius: 3px;
       padding: 4px 12px;
       overflow: hidden;
       color: #2D8CF0;

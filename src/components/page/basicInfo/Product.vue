@@ -13,6 +13,11 @@
           <el-tooltip class="item" effect="dark" content="批量删除" placement="top">
             <el-button type="danger" class="el-icon-delete" @click="delAll" size="mini" round></el-button>
           </el-tooltip>&nbsp;&nbsp;
+          <el-select v-model="select_cate" placeholder="筛选项" class="handle-select mr10" size="mini" round>
+            <el-option key="1" label="名称" value="name"></el-option>
+            <el-option key="2" label="编码" value="phone"></el-option>
+            <el-option key="3" label="价格" value="integral"></el-option>
+          </el-select>
           <el-input placeholder="筛选关键词" class="handle-input mr15" size="mini"></el-input>&nbsp;
           <el-button type="primary" icon="el-icon-search" @click="search" size="mini" round>搜索</el-button>
         </div>
@@ -184,6 +189,12 @@ export default {
           return false
         }
       })
+    },
+    delAll () {
+
+    },
+    search () {
+
     }
   }
 }
