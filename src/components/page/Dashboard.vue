@@ -15,7 +15,7 @@
                             <div class="user-info-list">上次登录时间：<span>2018-01-01</span></div>
                             <div class="user-info-list">上次登录地点：<span>东莞</span></div>
                         </el-card>
-                        <el-card shadow="hover">
+                        <el-card shadow="hover" class="mgb20">
                             <div slot="header" class="clearfix">
                                 <span>语言详情</span>
                             </div>
@@ -28,6 +28,14 @@
                             HTML
                             <el-progress :percentage="1.1" color="#f56c6c"></el-progress>
                         </el-card>
+                      <el-card shadow="hover"  class="mgb20">
+                        <div slot="header" class="clearfix">
+                          <span>上传插件</span>
+                        </div>
+                        <a href="javascript:;" class="file" >选择插件父目录
+                          <input ref="file"  class="fileUploaderClass" type='file' name="file" webkitdirectory @change.stop="changesData"/>
+                        </a>
+                      </el-card>
                     </el-col>
                 </el-row>
             </el-col>
@@ -91,9 +99,19 @@
                         </el-table-column>
                     </el-table>
                 </el-card>
-
             </el-col>
         </el-row>
+      <!--<uploader :options="options" class="uploader-example">-->
+        <!--<uploader-unsupport></uploader-unsupport>-->
+        <!--<uploader-drop>-->
+          <!--<p>Drop files here to upload or</p>-->
+          <!--<uploader-btn>select files</uploader-btn>-->
+          <!--<uploader-btn :attrs="attrs">select images</uploader-btn>-->
+          <!--<uploader-btn :directory="true">select folder</uploader-btn>-->
+        <!--</uploader-drop>-->
+        <!--<uploader-list></uploader-list>-->
+      <!--</uploader>-->
+
     </div>
 </template>
 
@@ -133,6 +151,32 @@ export default {
   computed: {
     role () {
       return this.name === 'admin' ? '超级管理员' : '普通用户'
+    }
+  },
+  methods: {
+    changesData () {
+      const t = this
+      let formdata = new FormData()
+      let config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+      var v = []
+      v = this.$refs.file.files
+      for (var a = 0; a < v.length; a++) {
+        formdata.append('files', v[a])
+      }
+      this.$axios.post('/api/interface/fileList', formdata, config).then(function (data) {
+        if (data.status === 200) {
+          t.$message({
+            message: '上传成功!!',
+            type: 'success'
+          })
+        } else {
+          t.$message.error('上传错误!!')
+        }
+      })
     }
   }
 }
@@ -244,4 +288,57 @@ export default {
         color: #999;
     }
 
+    .input-v{
+      border-color: #878787;
+      border-style: solid;
+      border-top-width: 0px;
+      border-right-width: 0px;
+      border-bottom-width: 1px;
+      border-left-width: 0px;
+      width: 100%;
+      height: 20px;
+    }
+    .uploader-example {
+      width: 880px;
+      padding: 15px;
+      margin: 40px auto 0;
+      font-size: 12px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, .4);
+    }
+    .uploader-example .uploader-btn {
+      margin-right: 4px;
+    }
+    .uploader-example .uploader-list {
+      max-height: 440px;
+      overflow: auto;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    .file {
+      position: relative;
+      display: inline-block;
+      background: #D0EEFF;
+      border: 1px solid #99D3F5;
+      border-radius: 4px;
+      padding: 4px 12px;
+      overflow: hidden;
+      color: #2D8CF0;
+      font-size: 15px;
+      text-decoration: none;
+      text-indent: 0;
+      line-height: 20px;
+    }
+    .file input {
+      position: absolute;
+      font-size: 100px;
+      right: 0;
+      top: 0;
+      opacity: 0;
+    }
+    .file:hover {
+      background: #2D8CF0;
+      border-color: #2D8CF0;
+      color: #004974;
+      text-decoration: none;
+    }
 </style>
