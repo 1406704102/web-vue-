@@ -132,6 +132,9 @@ export default {
       })
     },
     updateRolePage (index, row) {
+      const c = this
+      // const o = []
+      // this.$refs.tree.setCheckedKeys([4])
       const item = this.tableData[index]
       this.user = {
         id: item.id,
@@ -139,16 +142,21 @@ export default {
         passWord: item.passWord,
         role: item.role
       }
-      this.checkedKeys = item.role.split(',')
+      var result = item.role.split('6,').join('')
+      var result2 = result.split('8,').join('')
+      c.checkedKeys = result2.split(',')
+
       this.userRoleVisible = true
+
       setTimeout(() => { // 树加载完之后在勾选
         this.$refs.tree.setCheckedKeys(this.checkedKeys)
-      }, 10)
+      }, 100)
     },
     updateRole () {
       this.$axios.post('/api/UserCon/updateRole', require('qs').stringify({
         id: this.user.id,
-        role: this.$refs.tree.getHalfCheckedKeys().join(',') + ',' + this.$refs.tree.getCheckedKeys().join(',')
+        role: this.$refs.tree.getHalfCheckedKeys().join(',') + ',' + this.$refs.tree.getCheckedKeys().join(',')// 部分选中 和选中
+        // role: this.$refs.tree.getCheckedKeys().join(',')// 完全选中
       }))
       this.userRoleVisible = false
       location.reload()

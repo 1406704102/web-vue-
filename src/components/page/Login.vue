@@ -55,6 +55,7 @@ export default {
             if (data.status === 200) {
               if (data.data) {
                 localStorage.setItem('ms_username', from.username)
+                localStorage.setItem('ms_userId', from.username)
                 v.$router.push('/dashboard')
               } else {
                 v.failLogin()

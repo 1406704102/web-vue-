@@ -30,10 +30,10 @@
                         </el-card>
                       <el-card shadow="hover"  class="mgb20">
                         <div slot="header" class="clearfix">
-                          <span>上传插件</span>
+                          <span>上传插件 {{getLastUpTime}}</span>
                         </div>
                         <a href="javascript:;" class="file" >选择插件父目录
-                          <input ref="file"  class="fileUploaderClass" type='file' name="file" webkitdirectory @change.stop="test"/>
+                          <input ref="file"  class="fileUploaderClass" type='file' name="file" webkitdirectory @change.stop="changesData"/>
                         </a>
                       </el-card>
                     </el-col>
@@ -145,7 +145,8 @@ export default {
           title: '今天要写100行代码加几个bug吧',
           status: true
         }
-      ]
+      ],
+      getLastUpTime: ''
     }
   },
   computed: {
@@ -153,10 +154,23 @@ export default {
       return this.name === 'admin' ? '超级管理员' : '普通用户'
     }
   },
+  created () {
+    this.LastUpTime()
+  },
   methods: {
+    LastUpTime () {
+      const t = this
+      this.$axios.post('/api/interface/getLastUpTime').then(function (data) {
+        if (data.status === 200) {
+          t.getLastUpTime = data.data
+        } else {
+          t.$message.error('未上传!!')
+        }
+      })
+    },
     changesData () {
       const t = this
-      let formdata = new FormData()
+      let formData = new FormData()
       let config = {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -165,14 +179,15 @@ export default {
       var v = []
       v = this.$refs.file.files
       for (var a = 0; a < v.length; a++) {
-        formdata.append('files', v[a])
+        formData.append('files', v[a])
       }
-      this.$axios.post('/api/interface/fileList', formdata, config).then(function (data) {
+      this.$axios.post('/api/interface/addInterFace', formData, config).then(function (data) {
         if (data.status === 200) {
           t.$message({
             message: '上传成功!!',
             type: 'success'
           })
+          t.LastUpTime()
         } else {
           t.$message.error('上传错误!!')
         }
