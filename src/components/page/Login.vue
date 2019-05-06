@@ -12,6 +12,7 @@
         </el-form-item>
         <div class="login-btn">
           <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+          <!--<el-button type="primary" @click="getData"></el-button>-->
 
         </div>
       </el-form>
@@ -74,6 +75,20 @@ export default {
       this.ruleForm.username = ''
       this.ruleForm.password = ''
     }
+    // ,
+    // getData () {
+    //   let formData = new FormData()
+    //   this.url = '/api/postulant/getUser.do'
+    //   formData.append('uid', '2132132132132')
+    //   formData.append('uid1', '2132132132133')
+    //   formData.append('uid2', '2132132132134')
+    //   // let l = ({uid: 'qqqqqqqqqqqqqqqqqqqqqqqq'})
+    //   this.$axios.post(this.url, formData).then((res) => {
+    //     if (res.status === 200) {
+    //       console.log('13131321')
+    //     }
+    //   })
+    // }
   }
 }
 </script>

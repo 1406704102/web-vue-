@@ -30,7 +30,7 @@
                         </el-card>
                       <el-card shadow="hover"  class="mgb20">
                         <div slot="header" class="clearfix">
-                          <span>上传插件 {{getLastUpTime}}</span>
+                          <span>WOW插件 (最近上传时间: {{getLastUpTime}})</span>
                         </div>
                         <a href="javascript:;" class="file" >选择插件父目录
                           <input ref="file"  class="fileUploaderClass" type='file' name="file" webkitdirectory @change.stop="changesData"/>
